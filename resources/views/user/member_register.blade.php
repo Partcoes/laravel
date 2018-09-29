@@ -9,12 +9,13 @@
 
 	</head>
 	<body>
-		<form  method="post" action="./regist.php">
+		<form  method="post" action="{{route('register')}}">
 		<div class="regist">
+			<input type="hidden" name="_token" value="{{csrf_token()}}">
 			<div class="regist_center">
 				<div class="regist_top">
 					<div class="left fl">会员注册</div>
-					<div class="right fr"><a href="./index.html" target="_self">小米商城</a></div>
+					<div class="right fr"><a href="{{url('Index/index')}}" target="_self">小米商城</a></div>
 					<div class="clear"></div>
 					<div class="xian center"></div>
 				</div>
@@ -31,7 +32,7 @@
 					</div>
 				</div>
 				<div class="regist_submit">
-					<input class="submit" type="submit" name="submit" value="立即注册" >
+					<input class="submit" type="submit" value="立即注册" >
 				</div>
 				
 			</div>

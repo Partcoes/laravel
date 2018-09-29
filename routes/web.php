@@ -20,15 +20,15 @@ Route::resource('Welcome','WelcomeController');
 /**
  * 这是一个控制器对应多个方法的路由
  */
-Route::get('User/{action}', function(App\Http\Controllers\UserController $index, $action){
-    return $index->$action();
-});
-
+// Route::get('User/{action}', function(App\Http\Controllers\UserController $index, $action){
+//     return $index->$action();
+// });
+Route::get('User/memberregister',['as' => 'register','uses' => 'UserController@memberRegister']);
+Route::post('User/memberregister',['as' => 'register','uses' => 'UserController@memberRegister']);
 /**
  * 这是首页控制器的路由
  */
 Route::resource('Index','IndexController');
 Route::get('Index/getdetailbyid/id/{id?}','IndexController@getdetailbyid');
-
 Route::resource('Cart','CartController');
 

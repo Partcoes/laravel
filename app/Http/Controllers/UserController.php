@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 
 class UserController extends Controller
 {
@@ -23,6 +24,10 @@ class UserController extends Controller
      */
     public function memberRegister()
     {
+        $userinfo = Input::post();
+        if ($userinfo) {
+            dd($userinfo);
+        }
     	return view('user.member_register');
     }
 }
