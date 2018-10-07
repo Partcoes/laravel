@@ -23,8 +23,12 @@ Route::resource('Welcome','WelcomeController');
 // Route::get('User/{action}', function(App\Http\Controllers\UserController $index, $action){
 //     return $index->$action();
 // });
-Route::get('User/memberregister',['as' => 'register','uses' => 'UserController@memberRegister']);
-Route::post('User/memberregister',['as' => 'register','uses' => 'UserController@memberRegister']);
+Route::get('User/memberlogin',['as' => 'login','uses' => 'UserController@memberLogin']);
+Route::post('User/memberlogin',['as' => 'login','uses' => 'UserController@memberLogin']);
+Route::get('User/register',['as' => 'register','uses' => 'UserController@memberRegister']);
+Route::post('User/register',['as' => 'register','uses' => 'UserController@memberRegister']);
+Route::get('User/regtel',['as'=>'regtel','uses'=>'UserController@memberRegisterByMobile']);
+Route::post('User/regtel',['as'=>'regtel','uses'=>'UserController@memberRegisterByMobile']);
 /**
  * 这是首页控制器的路由
  */

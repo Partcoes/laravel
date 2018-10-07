@@ -13,26 +13,26 @@
 			}
 			.regway{
 				color:orange;
-			}
+			}			
 		</style>
 	</head>
 	<body>
-		<form  method="post" action="{{route('register')}}">
+		<form  method="post" action="{{route('regtel')}}">
 		<div class="regist">
 			<input type="hidden" name="_token" value="{{csrf_token()}}">
 			<div class="regist_center">
 				<div class="regist_top">
-					<div class="left fl">会员(<a class="regway" href="{{url('User/regtel')}}">手机注册</a>)</div>
+					<div class="left fl">会员(<a class="regway" href="{{url('User/register')}}">邮箱注册</a>)</div>
 					<div class="right fr"><a href="{{url('Index/index')}}" target="_self">小米商城</a></div>
 					<div class="clear"></div>
 					<div class="xian center"></div>
 				</div>
 				<div class="regist_main center">
 					<div class="username">用&nbsp;&nbsp;户&nbsp;&nbsp;名:&nbsp;&nbsp;<input class="shurukuang" type="text" name="username" placeholder="请输入你的用户名"/><span class='message'>@if(is_object($errors)){{$errors -> first('username')}}@endif</span></div>
-					<div class="username">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:&nbsp;&nbsp;<input class="shurukuang" type="password" name="password" placeholder="6-16位由数字字母下划线组成哦！"/><span class='message'>@if(is_object($errors)){{$errors -> first('password')}}@endif</span></div>
+					<div class="username">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:&nbsp;&nbsp;<input class="shurukuang" type="password" name="password" placeholder="请输入你的密码"/><span class='message'>@if(is_object($errors)){{$errors -> first('password')}}@endif</span></div>
 					
-					<div class="username">确认密码:&nbsp;&nbsp;<input class="shurukuang" type="password" name="repassword" placeholder="确认您的密码，注意密码保持一致哦！"/><span class='message'>@if(is_object($errors)){{$errors -> first('repassword')}}@endif</span></div>
-					<div class="username">邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱:&nbsp;&nbsp;<input class="shurukuang" type="text" name="email" placeholder="请填写您的邮箱账户"/><span class='message'>@if(is_object($errors)){{$errors -> first('email')}}@endif</span></div>
+					<div class="username">确认密码:&nbsp;&nbsp;<input class="shurukuang" type="password" name="repassword" placeholder="密码由6-16位数字字母下划线组成哦！"/><span class='message'>@if(is_object($errors)){{$errors -> first('repassword')}}@endif</span></div>
+					<div class="username">手&nbsp;&nbsp;机&nbsp;&nbsp;号:&nbsp;&nbsp;<input class="shurukuang" type="text" name="mobile" placeholder="您的手机号码吧，方便我们联系您！"/><span class='message'>@if(is_object($errors)){{$errors -> first('mobile')}}@endif</span></div>
 					<div class="username">
 						<div class="left fl">验&nbsp;&nbsp;证&nbsp;&nbsp;码:&nbsp;&nbsp;<input class="yanzhengma" type="text" name="validate" placeholder="请输入验证码"/></div>
 						<div class="right fl"><img src="{{captcha_src()}}" onclick="this.src='{{captcha_src()}}'+Math.random()"><span class='message'>@if(is_object($errors)){{$errors -> first('validate')}}@endif</span></div>
@@ -49,7 +49,7 @@
 	</body>
 </html>
 <script type="text/javascript">
-	$("input[name='username']").blur(function(){
+$("input[name='username']").blur(function(){
 		var username = $(this).val();
 		var reg = /^[a-zA-Z0-9]{6,12}$/;
 		if (reg.test(username)) {
@@ -88,15 +88,15 @@
 		}
 	})	
 
-	$("input[name='email']").blur(function(){
-		var email = $(this).val();
-		var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
-		if (reg.test(email)) {
+	$("input[name='mobile']").blur(function(){
+		var moboile = $(this).val();
+		var reg = /^1[34578][0-9]{9}$/;
+		if (reg.test(moboile)) {
 			$(this).next('b').remove();
 			$(this).after("<b style='color:green;margin-left:20px;'>√</b>");
 		}else{
 			$(this).next('b').remove();
-			$(this).after("<b style='color:orange;margin-left:20px;'>邮箱格式不正确！</b>");			
+			$(this).after("<b style='color:orange;margin-left:20px;'>请输入规范的手机号！</b>");			
 		}
-	})		
+	})
 </script>
