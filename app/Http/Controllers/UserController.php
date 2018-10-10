@@ -96,6 +96,7 @@ class UserController extends Controller
                 $vail = Validator::make($userinfo,$rule,$message);
                 if ($vail->passes()){
                     //删除掉确认密码不需要的字段
+                    
                     unset($userinfo['validate'],$userinfo['repassword']);
                     $res = Login::memberRegister($userinfo);
                     if($res){
