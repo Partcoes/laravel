@@ -26,7 +26,7 @@ class SendEmail implements ShouldQueue
     }
 
     /**
-     * Execute the job.
+     * 任务处理方法，发送邮件在这里进行处理
      *
      * @return void
      */

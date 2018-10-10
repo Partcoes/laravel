@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+
 class IndexController extends Controller
 {
     /**
@@ -12,8 +14,8 @@ class IndexController extends Controller
      */
     public function index()
     {
-    	dd(session('test'));return;
-    	return view('index.index');
+        $user = session('login');
+    	return view('index.index',['user'=>$user]);
     }
 
     /**
