@@ -33,6 +33,7 @@ Route::post('User/regtel',['as'=>'regtel','uses'=>'UserController@memberRegister
  * 这是首页控制器的路由
  */
 Route::resource('Index','IndexController');
+Route::get('User/logout',['uses'=>'UserController@logout']);
 Route::get('Index/getdetailbyid/id/{id?}','IndexController@getdetailbyid');
 Route::resource('Cart','CartController');
 
