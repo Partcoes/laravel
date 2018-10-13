@@ -28,9 +28,9 @@
 					<div class="gouwuche fr"><a href="{{url('Cart/show')}}">购物车</a></div>
 					<div class="fr">
 						<ul>
-							<li><a href="{{url('User/memberlogin')}}" target="_blank">登录</a></li>
+							<li>@if(!isset($user) || !$user)<a href="{{url('user/memberlogin')}}">登录</a>@else <a href="{{url('user/logout')}}">退出(@if(is_object($user)){{$user -> username}}<span>)</span>@else{{$user['username']}}<span>)</span>@endif</a>@endif</li>
 							<li>|</li>
-							<li><a href="{{url('User/memberregister')}}" target="_blank" >注册</a></li>
+							<li><a href="{{url('user/register')}}">注册</a></li>
 							<li>|</li>
 							<li><a href="">消息通知</a></li>
 						</ul>
