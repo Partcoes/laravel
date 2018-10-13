@@ -27,7 +27,7 @@
 			<div class="login_center">
 				<div class="login_top">
 					<div class="left fl">会员登录</div>
-					<div class="right fr">您还不是我们的会员？<a href="{{url('User/register')}}" target="_self">立即注册</a></div>
+					<div class="right fr">您还不是我们的会员？<a href="{{url('user/register')}}" target="_self">立即注册</a></div>
 					<div class="clear"></div>
 					<div class="xian center"></div>
 				</div>
@@ -44,10 +44,10 @@
 						<span class="message" >@if(is_object($errors)){{$errors -> first('validate')}}@endif</span>
 					</div>
 				</div>
+
 				<div class="login_submit">
 					<input class="submit" type="submit" value="立即登录" >
 				</div>
-				
 			</div>
 		</div>
 		</form>

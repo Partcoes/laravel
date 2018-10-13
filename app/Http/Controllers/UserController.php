@@ -5,10 +5,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
-use App\Service\UserService;
+use App\Services\UserService;
 use App\Models\Login;
 use Illuminate\Support\Facades\Validator;
-use App\Jobs\SendEmail;
 use Zhuzhichao\IpLocationZh\Ip;
 
 class UserController extends Controller
@@ -47,16 +46,12 @@ class UserController extends Controller
                 ];
             $vail = Validator::make($userinfo,$rule,$message);
             if ($vail -> passes()) {
-                $res = Login::memeberLogin($userinfo,$request);
-                if ($res) {
-                    foreach ($res as $k => $v) {
-                        if (!empty($v)) {
-                            $user = $v;
-                        }
-                    }
-                    unset($res);
-                    session(['login'=>$user]);
-                    return redirect('Index');
+                unset($userinfo['validate']);
+//                $res = Login::memeberLogin($userinfo,$request);
+                $result = UserService::dealUserinfo($userinfo);
+                if ($result) {
+                    session(['login'=>$result]);
+                    return redirect('index');
                 }                
             }else{
                 return back() -> withErrors($vail);
@@ -80,7 +75,7 @@ class UserController extends Controller
                         'username'=>'required',
                         'password'=>'required',
                         'repassword'=>'required|same:password',
-                        'email'=>'required',
+                        'email'=>'required|unique:username',
                         'validate'=>'required|captcha'
                     ];
                 //数据的错误提示信息
@@ -90,19 +85,20 @@ class UserController extends Controller
                         'repassword.required'=>'确定密码不能为空！',
                         'repassword.same'=>'两次密码不一致！',
                         'email.required'=>'邮箱不能为空',
+                        'email.unique' => '邮箱被占用！',
                         'validate.required'=>'验证码不为空！',
                         'validate.captcha'=>'验证码不正确！'
                     ];
                 $vail = Validator::make($userinfo,$rule,$message);
                 if ($vail->passes()){
                     //删除掉确认密码不需要的字段
-                    
                     unset($userinfo['validate'],$userinfo['repassword']);
                     $res = Login::memberRegister($userinfo);
                     if($res){
                         $user = Login::getEmail($res);
-                        $this -> dispatch( new SendEmail($user));
-                        return redirect('User/memberlogin');
+                        UserService::sendEmail($user);
+                        session(['login'=>$userinfo]);
+                        return redirect('index');
                     }                   
             } else {
                 //这里传入的是变量
@@ -126,7 +122,7 @@ class UserController extends Controller
                         'username'=>'required',
                         'password'=>'required',
                         'repassword'=>'required|same:password',
-                        'mobile'=>'required|max:11||min:11',
+                        'mobile'=>'required|max:11||min:11|unique:username',
                         'validate'=>'required|captcha'
                     ];
                 //数据的错误提示信息
@@ -138,6 +134,7 @@ class UserController extends Controller
                         'mobile.required'=>'手机号码不能为空',
                         'mobile.max'=>'手机号码不规范！',
                         'mobile.min'=>'手机号码不规范！',
+                        'mobile.unique' => '手机号已经注册！',
                         'validate.required'=>'验证码不为空！',
                         'validate.captcha'=>'验证码不正确！'
                     ];
@@ -147,7 +144,8 @@ class UserController extends Controller
                     unset($userinfo['validate'],$userinfo['repassword']);
                     $res = Login::memberRegister($userinfo);
                     if($res){
-                        return redirect('User/memberlogin');
+                        session(['login'=>$userinfo]);
+                        return redirect('index');
                     }                   
             } else {
                 //这里传入的是变量
@@ -164,7 +162,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         $request -> session() -> forget('login');
-        return redirect('Index');
+        return redirect('index');
     }
 
 }
