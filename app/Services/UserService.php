@@ -1,5 +1,9 @@
 <?php
-namespace App\Service;
+namespace App\Services;
+
+use App\Jobs\SendEmail;
+use App\Models\Login;
+
 /**
  * 
  * @authors 青彦 (you@example.org)
@@ -25,6 +29,30 @@ class UserService {
 		return;
 	}
 
+    /**
+     * 队列发送邮件的方法
+     * @param $user 邮件的接受方
+     * @return \Illuminate\Foundation\Bus\PendingDispatch 返回bool
+     */
+	public static function sendEmail($user)
+    {
+        return dispatch( new SendEmail($user));
+    }
+    public static function dealUserinfo($userinfo)
+    {
+        $telRule = '/^1[3578]\d{9}$/';
+        $emailRule = '/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/';
+        if (preg_match($telRule,$userinfo['acount'])){
+            $userinfo['mobile'] = $userinfo['acount'];
+        }elseif(preg_match($emailRule,$userinfo['acount'])){
+            $userinfo['email'] = $userinfo['acount'];
+        }else{
+            $userinfo['username'] = $userinfo['acount'];
+        }
+        unset($userinfo['acount']);
+        $userinfo['password'] = self::passwordByMd5($userinfo['password']);
+        return Login::memeberLogin($userinfo);
+    }
     /**
      * [passwordByMd5 密码加密的方法]
      * @return [type] [字符串为空则返回false 不为空返回加密后的字符串]

@@ -22,8 +22,8 @@
 			<input type="hidden" name="_token" value="{{csrf_token()}}">
 			<div class="regist_center">
 				<div class="regist_top">
-					<div class="left fl">会员(<a class="regway" href="{{url('User/register')}}">邮箱注册</a>)</div>
-					<div class="right fr"><a href="{{url('Index/index')}}" target="_self">小米商城</a></div>
+					<div class="left fl">会员(<a class="regway" href="{{url('user/register')}}">邮箱注册</a>)</div>
+					<div class="right fr"><a href="{{url('index/index')}}" target="_self">小米商城</a></div>
 					<div class="clear"></div>
 					<div class="xian center"></div>
 				</div>
@@ -53,11 +53,11 @@ $("input[name='username']").blur(function(){
 		var username = $(this).val();
 		var reg = /^[a-zA-Z0-9]{6,12}$/;
 		if (reg.test(username)) {
-			$(this).next('b').remove();
-			$(this).after("<b style='color:green;margin-left:20px;'>√</b>");
+			$(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:green;margin-left:20px;'>√</b>");
 		}else{
-			$(this).next('b').remove();
-			$(this).after("<b style='color:orange;margin-left:20px;'>用户名由6-12位数字字母组成</b>");			
+            $(this).next('span').text(' ');
+            $(this).next('span').html("<b style='color:orange;margin-left:20px;'>用户名由6-12位数字字母组成</b>");
 		}
 	})
 
@@ -66,25 +66,25 @@ $("input[name='username']").blur(function(){
 		var reg = /^(?=.*?[0-9])[a-zA-Z0-9\.\=\+\*\%\$\#\@]{6,16}$/;
 		var reg1 = /^[a-zA-Z0-9\.\=\+\*\%\$\#\@]{6,16}$/;
 		if (reg.test(password)) {
-			$(this).next('b').remove();
-			$(this).after("<b style='color:green;margin-left:20px;'>√</b>");
+            $(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:green;margin-left:20px;'>√</b>");
 		}else if(reg1.test(password)){
-			$(this).next('b').remove();
-			$(this).after("<b style='color:orange;margin-left:20px;'>至少包含一个数字</b>");			
+            $(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:orange;margin-left:20px;'>至少包含一个数字</b>");
 		}else{
-			$(this).next('b').remove();
-			$(this).after("<b style='color:orange;margin-left:20px;'>密码由6-16位数字字母以及.+=%$#@*组成</b>");				
+            $(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:orange;margin-left:20px;'>密码由6-16位数字字母以及.+=%$#@*组成</b>");
 		}
 	})	
 	$("input[name='repassword']").blur(function(){
 		var repassword = $(this).val();
 		var password = $("input[name='password']").val();
 		if (repassword == password && repassword != '') {
-			$(this).next('b').remove();
-			$(this).after("<b style='color:green;margin-left:20px;'>√</b>");
+			$(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:green;margin-left:20px;'>√</b>");
 		}else{
-			$(this).next('b').remove();
-			$(this).after("<b style='color:orange;margin-left:20px;'>两次密码不一致！</b>");			
+			$(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:orange;margin-left:20px;'>两次密码不一致！</b>");
 		}
 	})	
 
@@ -92,11 +92,11 @@ $("input[name='username']").blur(function(){
 		var moboile = $(this).val();
 		var reg = /^1[34578][0-9]{9}$/;
 		if (reg.test(moboile)) {
-			$(this).next('b').remove();
-			$(this).after("<b style='color:green;margin-left:20px;'>√</b>");
+			$(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:green;margin-left:20px;'>√</b>");
 		}else{
-			$(this).next('b').remove();
-			$(this).after("<b style='color:orange;margin-left:20px;'>请输入规范的手机号！</b>");			
+			$(this).next('span').text(' ');
+			$(this).next('span').html("<b style='color:orange;margin-left:20px;'>请输入规范的手机号！</b>");
 		}
 	})
 </script>

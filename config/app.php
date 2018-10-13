@@ -161,6 +161,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
 
+        JeroenNoten\LaravelAdminLte\ServiceProvider::class,
     ],
 
     /*

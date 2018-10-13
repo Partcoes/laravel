@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use App\Services\IndexService;
 
 class IndexController extends Controller
 {
@@ -15,7 +16,8 @@ class IndexController extends Controller
     public function index()
     {
         $user = session('login');
-    	return view('index.index',['user'=>$user]);
+        $typeAndData = IndexService::getTypeOfInfo();
+    	return view('index.index',['user'=>$user,'type'=>$typeAndData,'i' =>0]);
     }
 
     /**
