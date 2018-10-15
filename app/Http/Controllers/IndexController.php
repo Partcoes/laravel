@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Services\IndexService;
+use App\Models\Advertisement;
+use App\Models\Goods;
 
 class IndexController extends Controller
 {
@@ -17,7 +19,9 @@ class IndexController extends Controller
     {
         $user = session('login');
         $typeAndData = IndexService::getTypeOfInfo();
-    	return view('index.index',['user'=>$user,'type'=>$typeAndData,'i' =>0]);
+        $advertisement = Advertisement::getAdvertise();
+        $topForGoods = Goods::getTop4();
+    	return view('index.index',['user'=>$user,'type'=>$typeAndData,'advertise'=>$advertisement,'goods'=>$topForGoods]);
     }
 
     /**
@@ -36,6 +40,7 @@ class IndexController extends Controller
      */
     public function getDetailById(Request $request,$id)
     {
+        $goodsDetail = Goods::getDetail($id);
     	return view('Index.goods_detail');
     }
 }
