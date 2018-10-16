@@ -25,5 +25,15 @@ class Goods extends Model
 //        dd($goodsDetail);
     }
 
+    /**
+     * @param $type_id 类型id
+     * @return mixed 返回当前分类下所有商品信息
+     */
+    public static function getGoodsListForType($type_id)
+    {
+        $goodsList = self::where(['type_id'=>$type_id]) -> get() -> toArray();
+        return $goodsList;
+    }
+
 
 }

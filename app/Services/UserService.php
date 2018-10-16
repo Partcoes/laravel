@@ -3,6 +3,8 @@ namespace App\Services;
 
 use App\Jobs\SendEmail;
 use App\Models\Login;
+use Illuminate\Support\Facades\Validator;
+use App\Models\Admin;
 
 /**
  * 
@@ -28,6 +30,38 @@ class UserService {
 	{
 		return;
 	}
+
+	public static function userVerify($request)
+    {
+        $userLogin = $request -> input();
+        $acount = $userLogin['acount'];
+        $loginInfo['password'] = self::passwordByMd5($userLogin['password']);
+        $regEmail = '/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/';
+        $regMobile = '/^((1[358][0-9])|(14[57])|(17[0678])|(19[7]))\d{8}$/';
+        if (preg_match($regEmail,$acount)) {
+            $loginInfo['email'] = $acount;
+        }elseif(preg_match($regMobile,$acount)) {
+            $loginInfo['mobile'] = $acount;
+        }else{
+            $loginInfo['admin_name'] = $userLogin['acount'];
+        }
+        $column = array_keys($loginInfo)[1];
+        $rule = [
+            $column=>'required',
+            'password'=>'required'
+        ];
+        $message = [
+            $column.'.required'=>'邮箱/手机号/账户不能为空！',
+            'password.required'=>'密码不能为空',
+        ];
+        $vail = Validator::make($loginInfo,$rule,$message);
+        if ($vail -> passes()) {
+            $result = Admin::loginForAdmin($loginInfo);
+            return $result;
+        }else{
+            return back() -> withErrors($vail);
+        }
+    }
 
     /**
      * 队列发送邮件的方法

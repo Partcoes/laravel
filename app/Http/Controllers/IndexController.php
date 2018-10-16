@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Services\IndexService;
 use App\Models\Advertisement;
+use App\Models\Type;
 use App\Models\Goods;
 
 class IndexController extends Controller
@@ -28,10 +29,10 @@ class IndexController extends Controller
      * [show 商品列表展示]
      * @return [type] [description]
      */
-    public function show()
+    public function show($type_id)
     {
-
-    	return view('index.show');
+        $goodsList = IndexService::getListForTypeId($type_id);
+    	return view('index.show',['lists'=>$goodsList]);
     }
 
     /**

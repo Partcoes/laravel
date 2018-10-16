@@ -18,7 +18,7 @@
 			<a href=""><div class="ad_top fl"></div></a>
 			<div class="nav fl">
 				<ul>
-					<li><a href="{{url('Index/show')}}" target="_blank">小米手机</a></li>
+					<li><a href="{{url('index/show')}}" target="_blank">小米手机</a></li>
 					<li><a href="">红米</a></li>
 					<li><a href="">平板·笔记本</a></li>
 					<li><a href="">电视</a></li>
@@ -51,7 +51,7 @@
 					@if($type)
 						@foreach($type as $key=>$type)
 					<li>
-						<a href="">{{$type['type_name']}}</a>
+						<a href="{{url('index/show',['id'=>$type['type_id']])}}">{{$type['type_name']}}</a>
 						<div class="pop">
 							<div class="left fl">
 								@if(isset($type['son']))

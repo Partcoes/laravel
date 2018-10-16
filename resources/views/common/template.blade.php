@@ -5,7 +5,7 @@
         <meta name="author" content="order by dede58.com"/>
 		<title>小米手机列表</title>
 		<link rel="stylesheet" type="text/css" href="{{URL::asset('css/user/style.css')}}">
-		<base href="{{URL::asset('images/user/user')}}"></base>
+		<base href="{{URL::asset('images/user')}}"></base>
 	</head>
 	<body>
 <header>

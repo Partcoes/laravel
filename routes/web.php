@@ -34,8 +34,14 @@ Route::post('user/regtel',['as'=>'regtel','uses'=>'UserController@memberRegister
 /**
  * 这是首页控制器的路由
  */
-Route::resource('index','IndexController');
+Route::get('index/index',['uses'=>'IndexController@index']);
+Route::get('index/show/{id?}',['uses'=>'IndexController@show']);
 Route::get('user/logout',['uses'=>'UserController@logout']);
-Route::get('index/getdetailbyid/id/{id?}','IndexController@getdetailbyid');
+Route::get('index/getdetailbyid/{id?}','IndexController@getdetailbyid');
 Route::resource('cart','CartController');
+
+Route::get('admin/login',['uses'=>'AdminController@login']);
+Route::post('admin/login',['uses'=>'AdminController@login']);
+Route::get('admin/index',['uses'=>'AdminController@index']);
+Route::get('admin/logout',['uses'=>'AdminController@logout']);
 
