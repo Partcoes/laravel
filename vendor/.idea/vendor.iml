@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/jeroennoten/laravel-adminlte" />
       <excludeFolder url="file://$MODULE_DIR$/predis/predis" />
+      <excludeFolder url="file://$MODULE_DIR$/zizaco/entrust" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

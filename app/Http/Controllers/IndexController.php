@@ -43,5 +43,6 @@ class IndexController extends Controller
     {
         $goodsDetail = Goods::getDetail($id);
     	return view('Index.goods_detail');
+
     }
 }

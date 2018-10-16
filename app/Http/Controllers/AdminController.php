@@ -34,7 +34,7 @@ class AdminController extends Controller
         if (!$user){
             return redirect('admin/login');
         }
-        
+        dd(\Route::current());
 //        config(['adminlte.menu'=>$menu]);
 //        dd(config('adminlte'));
         return view('admin/index',['user'=>$user]);
