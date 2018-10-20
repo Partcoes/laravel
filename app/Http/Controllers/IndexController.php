@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use App\Services\IndexService;
+use App\Models\Advertisement;
+use App\Models\Type;
+use App\Models\Goods;
 
 class IndexController extends Controller
 {
@@ -17,17 +20,19 @@ class IndexController extends Controller
     {
         $user = session('login');
         $typeAndData = IndexService::getTypeOfInfo();
-    	return view('index.index',['user'=>$user,'type'=>$typeAndData,'i' =>0]);
+        $advertisement = Advertisement::getAdvertise();
+        $topForGoods = Goods::getTop4();
+    	return view('index.index',['user'=>$user,'type'=>$typeAndData,'advertise'=>$advertisement,'goods'=>$topForGoods]);
     }
 
     /**
      * [show 商品列表展示]
      * @return [type] [description]
      */
-    public function show()
+    public function show($type_id)
     {
-
-    	return view('index.show');
+        $goodsList = IndexService::getListForTypeId($type_id);
+    	return view('index.show',['lists'=>$goodsList]);
     }
 
     /**
@@ -36,6 +41,8 @@ class IndexController extends Controller
      */
     public function getDetailById(Request $request,$id)
     {
+        $goodsDetail = Goods::getDetail($id);
     	return view('Index.goods_detail');
+
     }
 }

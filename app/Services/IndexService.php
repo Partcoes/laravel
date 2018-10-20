@@ -8,6 +8,7 @@
 namespace App\Services;
 
 use App\Models\Type;
+use App\Models\Goods;
 
 class IndexService
 {
@@ -20,6 +21,18 @@ class IndexService
         $typeInfo = Type::getTypeOfInfo();
         return self::tree($typeInfo);
 
+    }
+
+    /**
+     * 根据分类id 获取列表
+     * @param $type_id 分类id
+     * @return mixed 获取的商品列表
+     */
+    public static function getListForTypeId($type_id)
+    {
+        $goodsList = Goods::getGoodsListForType($type_id);
+        $goodsList = self::groupByNum($goodsList,5);
+        return $goodsList;
     }
 
     /**
@@ -47,6 +60,20 @@ class IndexService
             }
         }
         return $newTypeInfo;
+    }
+
+    /**
+     * @param $datas 要分组的数据
+     * @param int $num 分组的长度
+     * @return 分好组的数组
+     */
+    public static function groupByNum($datas,$num = 5)
+    {
+        if(!$datas){
+            return false;
+        }
+        $newArr = array_chunk($datas,$num);
+        return $newArr;
     }
 
 }

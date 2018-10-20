@@ -18,7 +18,7 @@
 			<a href=""><div class="ad_top fl"></div></a>
 			<div class="nav fl">
 				<ul>
-					<li><a href="{{url('Index/show')}}" target="_blank">小米手机</a></li>
+					<li><a href="{{url('index/show')}}" target="_blank">小米手机</a></li>
 					<li><a href="">红米</a></li>
 					<li><a href="">平板·笔记本</a></li>
 					<li><a href="">电视</a></li>
@@ -51,7 +51,7 @@
 					@if($type)
 						@foreach($type as $key=>$type)
 					<li>
-						<a href="">{{$type['type_name']}}</a>
+						<a href="{{url('index/show',['id'=>$type['type_id']])}}">{{$type['type_name']}}</a>
 						<div class="pop">
 							<div class="left fl">
 								@if(isset($type['son']))
@@ -61,7 +61,7 @@
 								<div>
 									<div class="xuangou_left fl">
 										<a href="">
-											<div class="img fl"><img src="{{$son['icon']}}" alt=""></div>
+											<div class="img fl"><img  style="width:40px;height:40px;" src="{{$son['icon']}}" alt=""></div>
 											<span class="fl">{{mb_substr($son['type_name'],0,11)}}</span>
 											<div class="clear"></div>
 										</a>
@@ -81,7 +81,7 @@
 								<div>
 									<div class="xuangou_left fl">
 										<a href="">
-											<div class="img fl"><img src="{{$son['icon']}}" alt=""></div>
+											<div class="img fl"><img style="width:40px;height:40px;" src="{{$son['icon']}}" alt=""></div>
 											<span class="fl">{{mb_substr($son['type_name'],0,15)}}</span>
 											<div class="clear"></div>
 										</a>
@@ -101,7 +101,7 @@
 								<div>
 									<div class="xuangou_left fl">
 										<a href="">
-											<div class="img fl"><img src="{{$son['icon']}}" alt=""></div>
+											<div class="img fl"><img  style="width:40px;height:40px;" src="{{$son['icon']}}" alt=""></div>
 											<span class="fl">{{mb_substr($son['type_name'],0,15)}}</span>
 											<div class="clear"></div>
 										</a>
@@ -122,24 +122,28 @@
 			</div>
 		
 		</div>	
-
+	@if($advertise)
 		<div class="sub_banner center">
 			<div class="sidebar fl">
-				<div class="fl"><a href=""><img src="user/hjh_01.gif"></a></div>
-				<div class="fl"><a href=""><img src="user/hjh_02.gif"></a></div>
-				<div class="fl"><a href=""><img src="user/hjh_03.gif"></a></div>
-				<div class="fl"><a href=""><img src="user/hjh_04.gif"></a></div>
-				<div class="fl"><a href=""><img src="user/hjh_05.gif"></a></div>
-				<div class="fl"><a href=""><img src="user/hjh_06.gif"></a></div>
+				@foreach($advertise as $k => $advertisement)
+					@if($advertisement -> advertise_type == 0)
+
+						<div class="fl"><a href="{{$advertisement->advertise_url}}"><img src="{{$advertisement->advertise_img}}"></a></div>
+					@endif
+				@endforeach
 				<div class="clear"></div>
 			</div>
-			<div class="datu fl"><a href=""><img src="user/hongmi4x.png" alt=""></a></div>
-			<div class="datu fl"><a href=""><img src="user/xiaomi5.jpg" alt=""></a></div>
-			<div class="datu fr"><a href=""><img src="user/pinghengche.jpg" alt=""></a></div>
+			@foreach($advertise as $k => $advertisement)
+				@if($advertisement -> advertise_type == 1)
+					<div class="datu fl"><a href="{{$advertisement -> advertise_url}}"><img src="{{$advertisement -> advertise_img}}" alt=""></a></div>
+				@endif
+			@endforeach
+
 			<div class="clear"></div>
 
 
 		</div>
+	@endif
 	<!-- end banner -->
 	<div class="tlinks">Collect from <a href="http://www.cssmoban.com/" >企业网站模板</a></div>
 
@@ -148,36 +152,16 @@
 			
 			<div class="biaoti center">小米明星单品</div>
 			<div class="main center">
-				<div class="mingxing fl">
-					<div class="sub_mingxing"><a href=""><img src="user/pinpai1.png" alt=""></a></div>
-					<div class="pinpai"><a href="">小米MIX</a></div>
-					<div class="youhui">5月9日-21日享花呗12期分期免息</div>
-					<div class="jiage">3499元起</div>
-				</div>
-				<div class="mingxing fl">
-					<div class="sub_mingxing"><a href=""><img src="user/pinpai2.png" alt=""></a></div>
-					<div class="pinpai"><a href="">小米5s</a></div>
-					<div class="youhui">5月9日-10日，下单立减200元</div>
-					<div class="jiage">1999元</div>
-				</div>
-				<div class="mingxing fl">
-					<div class="sub_mingxing"><a href=""><img src="user/pinpai3.png" alt=""></a></div>
-					<div class="pinpai"><a href="">小米手机5 64GB</a></div>
-					<div class="youhui">5月9日-10日，下单立减100元</div>
-					<div class="jiage">1799元</div>
-				</div>
-				<div class="mingxing fl"> 	
-					<div class="sub_mingxing"><a href=""><img src="user/pinpai4.png" alt=""></a></div>
-					<div class="pinpai"><a href="">小米电视3s 55英寸</a></div>
-					<div class="youhui">5月9日，下单立减200元</div>
-					<div class="jiage">3999元</div>
-				</div>
-				<div class="mingxing fl">
-					<div class="sub_mingxing"><a href=""><img src="user/pinpai5.png" alt=""></a></div>
-					<div class="pinpai"><a href="">小米笔记本</a></div>
-					<div class="youhui">更轻更薄，像杂志一样随身携带</div>
-					<div class="jiage">3599元起</div>
-				</div>
+				@if($goods)
+					@foreach($goods as $k => $topForGood)
+					<div class="mingxing fl">
+						<div class="sub_mingxing"><a href=""><img src="{{$topForGood -> goods_img}}" alt=""></a></div>
+						<div class="pinpai"><a href="">{{$topForGood -> goods_name}}</a></div>
+						<div class="youhui">{{$topForGood -> active_brief}}</div>
+						<div class="jiage">{{$topForGood -> shop_price}}元起</div>
+					</div>
+					@endforeach
+				@endif
 				<div class="clear"></div>
 			</div>
 		</div>
