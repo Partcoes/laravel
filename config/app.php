@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -147,7 +147,6 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-
         /*
          * Package Service Providers...
          */
@@ -214,7 +213,6 @@ return [
         'Captcha' => Mews\Captcha\Facades\Captcha::class,
         'Ip'  => 'Zhuzhichao\IpLocationZh\Ip',
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
-
     ],
 
 ];

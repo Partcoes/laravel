@@ -4,7 +4,7 @@ namespace App\Services;
 use App\Jobs\SendEmail;
 use App\Models\Login;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Admin;
+use App\Models\AdminUser;
 
 /**
  * 
@@ -56,7 +56,7 @@ class UserService {
         ];
         $vail = Validator::make($loginInfo,$rule,$message);
         if ($vail -> passes()) {
-            $result = Admin::loginForAdmin($loginInfo);
+            $result = AdminUser::loginForAdmin($loginInfo);
             return $result;
         }else{
             return back() -> withErrors($vail);

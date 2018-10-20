@@ -59,24 +59,21 @@
                     <ul class="nav navbar-nav">
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="{{isset($user['admin_thumb'])?$user['admin_thumb']:'/images/user/5c_80.png'}}" class="user-image" alt="User Image">
-                                <span class="hidden-xs">{{$user['admin_name']}}</span>
+                                <img src="{{isset(session('admin_login')['admin_thumb'])?session('admin_login')['admin_thumb']:'/images/user/5c_80.png'}}" class="user-image" alt="User Image">
+                                <span class="hidden-xs">{{session('admin_login')['admin_name']}}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img id="user-header" src="{{isset($user['admin_thumb'])?$user['admin_thumb']:'/images/user/5c_80.png'}}" class="img-circle" alt="User Image">
-                                    <p>{{$user['admin_name']}}</p>
+                                    <img id="user-header" src="{{isset(session('admin_login')['admin_thumb'])?session('admin_login')['admin_thumb']:'/images/user/5c_80.png'}}" class="img-circle" alt="User Image">
+                                    <p>{{session('admin_login')['admin_name']}}</p>
                                 </li>
                                 <!--Menu Body-->
                                 <li class="user-body">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">待定</a>
+                                    <div class="col-xs-6 text-center">
+                                        <span class="fa fa-fw fa-spinner"></span><a href="{{url('admin/upcache')}}">更新缓存</a>
                                     </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">待定</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
+                                    <div class="col-xs-6 text-center">
                                         <a href="#">待定</a>
                                     </div>
                                 </li>
@@ -134,9 +131,7 @@
 
             <!-- Main content -->
             <section class="content">
-
                 @yield('content')
-
             </section>
             <!-- /.content -->
             @if(config('adminlte.layout') == 'top-nav')

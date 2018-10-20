@@ -30,7 +30,8 @@ return [
     |
     */
 
-    'logo' => '<b>青彦商城</b>',
+//    'logo' => '<input type="text" placeholder="请输入菜单项" class="form-control">',
+    'logo' => '<b>Part·Coes·T</b>',
 
     'logo_mini' => '<b>A</b>Q',
 
@@ -45,7 +46,7 @@ return [
     |
     */
 
-    'skin' => 'purple-light',
+    'skin' => 'blue',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +94,7 @@ return [
 
     'login_url' => 'admin/login',
 
-    'register_url' => 'register',
+    'register_url' => 'admin/insert',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,19 +180,20 @@ return [
 //                ],
             ],
         ],
-        '实验室',
-        [
-            'text'       => '订单统计',
-            'icon_color' => 'red',
-        ],
-        [
-            'text'       => '用户分析',
-            'icon_color' => 'yellow',
-        ],
-        [
-            'text'       => '用户信息',
-            'icon_color' => 'aqua',
-        ],
+//        '实验室',
+//        [
+//            'text'       => '订单统计',
+//            'url' => 'order/index',
+//            'icon_color' => 'red',
+//        ],
+//        [
+//            'text'       => '用户分析',
+//            'icon_color' => 'yellow',
+//        ],
+//        [
+//            'text'       => '用户信息',
+//            'icon_color' => 'aqua',
+//        ],
     ],
 
     /*
