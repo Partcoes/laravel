@@ -58,6 +58,7 @@
                     <option type="{{$icon -> icon_type}}" value="{{$icon -> icon_name}}">{{$icon -> icon_name}}</option>
                 @endforeach
             </select>
+            <input type="hidden" name="menu_id" value="{{$menu -> menu_id}}">
             <input id="icon-status" type="hidden" name="icon_status" value="0">
             <span id="icon" style="position: absolute; right: 10px;bottom:10px;" class=""></span>
         </div>

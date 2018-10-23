@@ -20,7 +20,7 @@ class AdminResource extends Model
     public $timestamps  = false;
     public static function roleGetResource($roleId)
     {
-        $resource = self::whereIn('role_id',$roleId) -> get(['type_id','resource_id']) -> toArray();
+        $resource = self::whereIn('role_id',$roleId) ->select() -> get(['type_id','resource_id']) -> toArray();
 //        $type_id = array_unique(array_column($resource,'type_id'));
         $type0 = [];
         $type1 = [];
@@ -59,6 +59,18 @@ class AdminResource extends Model
             DB::rollBack();
             return false;
         }
+    }
+
+    public static function deleteResourceByRoleId($roleId)
+    {
+        $result = self::where(['role_id'=>$roleId]) -> delete();
+        return $result;
+    }
+
+    public static function deleteResourceByMenuId($menuId,$resourceType)
+    {
+        $result = self::where(['resource_id' => $menuId]) -> where($resourceType) -> delete();
+        return $result;
     }
 //    public static function roleGetResourceById($roleId)
 //    {

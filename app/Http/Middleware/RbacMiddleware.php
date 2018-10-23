@@ -19,15 +19,16 @@ class RbacMiddleware
     {
 //        dd($request);
         $menus = session('menu');
-        $menuses = AdminService::tree($menus,'menu_id');
-//        array_unshift($menuses,'导航栏');
-//        dd($menus);
-        config(['adminlte.menu'=>$menuses]);
         $url = empty($menus)?'':array_column($menus,'menu_url');
+        $url = array_merge($url,$menus['urls']);
+//        dd($menus);
+        unset($menus['urls']);
+        $menuses = AdminService::tree($menus,'menu_id');
+        config(['adminlte.menu'=>$menuses]);
         $uri = $request -> path();
         $result = session('admin_login');
 //        return $next($request);
-        if ((!empty($url) && in_array($uri,$url)) || $result['admin_type'] == 1)
+        if ((!empty($url) && in_array($uri,$url )) || $result['admin_type'] == 1)
         {
 //            echo "您没有权限！";die;
             return $next($request);

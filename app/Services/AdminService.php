@@ -110,6 +110,7 @@ class AdminService
             $menuObj = new AdminMenu();
             $result = $menuObj -> insertMenu($formInfo);
             return $result;
+
         }else{
             return false;
         }
@@ -214,6 +215,28 @@ class AdminService
         }
 
     }
+
+    public static function insertButton($formInfo)
+    {
+        $rule = [
+            'button_name' => 'required',
+            'button_url' => 'unique:admin_button',
+            'menu_id' => 'required',
+            'button_group' =>'required',
+        ];
+        $vail = Validator::make($formInfo,$rule);
+//        dd($formInfo);
+        if($vail -> passes()){
+            unset($formInfo['_token']);
+            $formInfo['button_url'] = empty($formInfo['button_url'])?'#':$formInfo['button_url'];
+//            dd($formInfo);
+            $result = AdminButton::insertButton($formInfo);
+            return $result;
+        }else{
+            return false;
+        }
+
+    }
     public static function updateMenu($formInfo,$menuDetail)
     {
         $rule = [
@@ -231,8 +254,11 @@ class AdminService
             $formInfo['parent_id'] = $pathAndParentId[0];
             $formInfo['path'] = isset($pathAndParentId[1])?$pathAndParentId[1]:0;
             $menuObj = new AdminMenu();
-            $menuId = $formInfo['id'];
-            unset($formInfo['id']);
+            $menuId = $formInfo['menu_id'];
+            unset($formInfo['menu_id']);
+            if(isset($formInfo['id'])){
+                unset($formInfo['id']);
+            }
             $result = $menuObj -> updateMenu($formInfo,$menuId);
             return $result;
         }else{
@@ -392,5 +418,51 @@ class AdminService
 
         }
         return false;
+    }
+
+    public static function givePowerForRoleByBtn($formInfo)
+    {
+        $rule = [
+            'role_id' => 'required',
+            'resource_id' => 'required',
+        ];
+        $vail = Validator::make($formInfo,$rule);
+        if($vail -> passes()){
+            $resources = [];
+            unset($formInfo['_token']);
+            foreach($formInfo['resource_id'] as $k => $resource)
+            {
+                $resources[$k]['resource_id'] = $resource;
+                $resources[$k]['role_id'] = $formInfo['role_id'];
+
+            }
+            $result = AdminResource::updateShipByRole($resources,$formInfo['role_id'],1);
+            return $result;
+        }else{
+            return false;
+        }
+    }
+    public static function sameMenuIdGroup($buttons,$menus)
+    {
+        $item = [];
+        $menusName = array_column($menus,'menu_name');
+        $menuId = array_column($menus,'menu_id');
+        $menus = array_combine($menuId,$menusName);
+        foreach($buttons as $k=>$v){
+            if(!isset($item[$v['menu_id']])){
+                $item[$v['menu_id']][]=$v;
+            }else{
+                $item[$v['menu_id']][]=$v;
+            }
+        }
+        $menusId = array_keys($menus);
+        $buttonAndMenu = [];
+        foreach($item as $kt => $vt)
+        {
+            if(in_array($kt,$menusId)){
+                $buttonAndMenu[$menus[$kt]] = $vt;
+            }
+        }
+        return $buttonAndMenu;
     }
 }

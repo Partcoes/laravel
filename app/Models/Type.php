@@ -16,4 +16,9 @@ class Type extends Model
     {
         return self::all() -> toArray();
     }
+
+    public static function getTypeList($typeStatus = '' , $isPage = true,$pageSize = 8)
+    {
+
+    }
 }

@@ -152,7 +152,7 @@
 			
 			<div class="biaoti center">小米明星单品</div>
 			<div class="main center">
-				@if($goods)
+				@if(isset($goods))
 					@foreach($goods as $k => $topForGood)
 					<div class="mingxing fl">
 						<div class="sub_mingxing"><a href=""><img src="{{$topForGood -> goods_img}}" alt=""></a></div>

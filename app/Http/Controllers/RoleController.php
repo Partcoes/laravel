@@ -21,6 +21,7 @@ class RoleController extends Controller
        $menuUri = $request -> path();
        $menuId = AdminMenu::getMenuIdForNow($menuUri);
        $buttons = AdminButton::getButtonHad($menuId);
+
        $buttons = AdminService::dealButton($buttons);
        return view('role.role_list',['roles'=>$roleList,'buttons'=>$buttons['group'],'alones'=>$buttons['alone']]);
    }
@@ -96,5 +97,23 @@ class RoleController extends Controller
 //        dd($menuList);
         $menus = AdminService::tree($menuList,'menu_id');
         return view('menu.give_power',['roles' => $roleList,'menus' => $menus]);
+    }
+
+    public function givePowerForRoleByBtn(Request $request)
+    {
+        $formInfo = $request -> input();
+        if($formInfo){
+           $result = AdminService::givePowerForRoleByBtn($formInfo);
+            if($result){
+                return redirect('role/manager');
+            }else{
+                return redirect('role/givebtn');
+            }
+        }
+        $roleList = AdminRole::getRoleList();
+        $menus = AdminMenu::getAllMenu();
+        $buttons = AdminButton::getAllButton();
+        $buttons = AdminService::sameMenuIdGroup($buttons,$menus);
+        return view('role.give_button',['roles'=>$roleList,'menus'=>$menus,'buttons'=>$buttons]);
     }
 }

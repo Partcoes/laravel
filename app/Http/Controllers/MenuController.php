@@ -35,7 +35,11 @@ class MenuController extends Controller
         $formInfo = $request -> input();
         if($formInfo){
             $result = AdminService::insertMenu($formInfo,$menuList);
-            return redirect('menu/manager');
+            if($result){
+                return redirect('menu/manager');
+            }else{
+                return redirect('menu/add');
+            }
         }
         $iconList = Icon::getAllIcon();
         return view('menu.insert_menu',['icons'=>$iconList,'menus'=>$menuList]);
@@ -45,13 +49,33 @@ class MenuController extends Controller
     {
         $menuList = AdminMenu::getAllMenu(false);
         $formInfo = $request -> input();
-        $menuDetail = AdminMenu::getMenuById($formInfo['id']);
         if($formInfo && count($formInfo) > 1){
+            $menuDetail = session('menu_detail');
             $result = AdminService::updateMenu($formInfo,$menuDetail);
-            return redirect('menu/manager');
+            if($result){
+                return redirect('menu/manager');
+            }else{
+                return redirect('menu/update?id='.$menuDetail -> menu_id);
+            }
         }
+//        dd($formInfo);
+        $menuDetail = AdminMenu::getMenuById($formInfo['id']);
+        session() -> flash('menu_detail',$menuDetail);
         $iconList = Icon::getAllIcon();
         return view('menu.update_menu',['menu'=>$menuDetail,'menus'=>$menuList,'icons'=>$iconList]);
+    }
+
+    public function deleteMenuById(Request $request)
+    {
+        $adminId = $request -> get('id');
+        if(empty($adminId) || $request -> ajax() == false){return redirect('admin/index');}
+        $result = AdminMenu::deleteMenuById($adminId);
+        if($result)
+        {
+            return  1;
+        }else{
+            return 0;
+        }
     }
 
 }

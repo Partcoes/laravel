@@ -43,6 +43,8 @@ class AdminMenu extends Model
            $menus = self::paginate($pageSize);
        }elseif($sort == false && $isToArray == true){
             $menus = self::get() -> toArray();
+       }else{
+           $menus = self::get();
        }
        return $menus;
     }
@@ -112,6 +114,31 @@ class AdminMenu extends Model
             }
         }catch (\Exception $e){
             dd($e -> getMessage());
+            Log::error($e -> getMessage());
+            DB::rollBack();
+            return false;
+        }
+    }
+
+    public static function deleteMenuById($menuId,$isMenu = 0)
+    {
+        $resourceType = ['type_id' => $isMenu];
+        DB::beginTransaction();
+        try {
+            $deleteMenu = self::find($menuId) -> delete();
+            $findResult = DB::table('admin_resource') -> where(['resource_id'=>$menuId]) -> where($resourceType) -> get() -> toArray();
+            $deleteResource = AdminResource::deleteResourceByMenuId($menuId,$resourceType);
+            if($findResult == 0 || empty($findResult)){
+                $deleteResource = true;
+            }
+            if ($deleteMenu && $deleteResource) {
+                DB::commit();
+                return true;
+            } else {
+                DB::rollBack();
+                return false;
+            }
+        }catch (\Exception $e){
             Log::error($e -> getMessage());
             DB::rollBack();
             return false;

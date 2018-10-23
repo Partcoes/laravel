@@ -21,8 +21,8 @@ class IndexController extends Controller
         $user = session('login');
         $typeAndData = IndexService::getTypeOfInfo();
         $advertisement = Advertisement::getAdvertise();
-        $topForGoods = Goods::getTop4();
-    	return view('index.index',['user'=>$user,'type'=>$typeAndData,'advertise'=>$advertisement,'goods'=>$topForGoods]);
+//        $topForGoods = Goods::getTop4();
+    	return view('index.index',['user'=>$user,'type'=>$typeAndData,'advertise'=>$advertisement]);
     }
 
     /**
