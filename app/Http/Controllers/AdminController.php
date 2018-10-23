@@ -38,12 +38,16 @@ class AdminController extends Controller
     public function index()
     {
 //        $menu = session('menu');
-//        dd($menu);
         $user = session('admin_login');
         if (!$user){
             return redirect('admin/login');
         }
-
+        $menus = session('menu');
+        unset($menus['urls']);
+        $menuses = AdminService::tree($menus,'menu_id');
+//        array_unshift($menuses,'导航栏');
+//        dd($menus);
+        config(['adminlte.menu'=>$menuses]);
 //        dd($menu);
 
 //        dd($menus);
@@ -67,6 +71,7 @@ class AdminController extends Controller
         $menuId = AdminMenu::getMenuIdForNow($menuUri);
         $buttons = AdminButton::getButtonHad($menuId);
         $buttons = AdminService::dealButton($buttons);
+
         return view('admin.admin_list',['users'=>$adminList,'buttons'=>$buttons['group'],'alones'=>$buttons['alone']]);
     }
 
@@ -81,6 +86,8 @@ class AdminController extends Controller
             $result = AdminService::insertAdmin($formInfo);
             if($result) {
                 return redirect('admin/manager');
+            }else{
+                return redirect('admin/insert');
             }
         }
         $roleList = AdminRole::getRoleList();
@@ -98,13 +105,15 @@ class AdminController extends Controller
             $result = AdminService::updateAdmin($request);
             if($result) {
                 return redirect('admin/detail');
+            }else{
+                return redirect('admin/update?id='.$formInfo['admin_id']);
             }
         }
         $roleList = AdminRole::getRoleList();
-        if(isset($formInfo['id']) == false || empty($formInfo))
-        {
-            return redirect('admin/manager');
-        }
+//        if(isset($formInfo['id']) == false || empty($formInfo))
+//        {
+//            return redirect('admin/manager');
+//        }
         $adminInfo = AdminUser::getAdminDetail($formInfo['id']);
         $shipDetail = AdminShip::adminGetRole($formInfo['id']);
         return view('admin.update_admin', ['roles' => $roleList,'admin'=>$adminInfo,'ship'=>$shipDetail]);

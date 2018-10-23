@@ -46,9 +46,9 @@ Route::resource('cart','CartController');
 Route::get('admin/login',['uses'=>'AdminController@login']);
 Route::post('admin/login',['uses'=>'AdminController@login']);
 Route::get('admin/logout',['uses'=>'AdminController@logout']);
+Route::get('admin/index',['uses'=>'AdminController@index']);
 Route::get('admin/upcache',['uses' => 'AdminController@updateCache']);
 Route::group(['middleware' => ['rbac']], function () {
-    Route::get('admin/index',['uses'=>'AdminController@index']);
     Route::get('order/show',['uses'=>'OrderController@show']);
     Route::get('order/index',['uses'=> 'OrderController@index']);
     Route::get('admin/manager',['as'=>'manager','uses'=>'AdminController@getAdminList']);
@@ -66,11 +66,20 @@ Route::group(['middleware' => ['rbac']], function () {
     Route::post('role/update',['uses'=>'RoleController@updateRoleById']);
     Route::get('role/give',['uses' => 'RoleController@givePowerForRole']);
     Route::post('role/give',['uses' => 'RoleController@givePowerForRole']);
+    Route::get('role/givebtn',['uses'=> 'RoleController@givePowerForRoleByBtn']);
+    Route::post('role/givebtn',['uses'=> 'RoleController@givePowerForRoleByBtn']);
     Route::get('menu/add',['uses'=>'MenuController@insertMenu']);
     Route::post('menu/add',['uses'=>'MenuController@insertMenu']);
     Route::post('menu/update',['uses'=>'MenuController@updateMenuById']);
-    Route::get('menu/remove',['uses'=>'MenuController@updateMenuById']);
     Route::get('menu/update',['uses'=>'MenuController@updateMenuById']);
+    Route::get('menu/remove',['uses'=>'MenuController@deleteMenuById']);
     Route::get('menu/manager',['uses'=>'MenuController@getMenuList']);
+    Route::get('button/manager',['uses' => 'ButtonController@getButtonList']);
+    Route::get('button/add',['uses' => 'ButtonController@insertButton']);
+    Route::post('button/add',['uses' => 'ButtonController@insertButton']);
+    Route::get('button/remove',['uses'=>'ButtonController@deleteButtonById']);
+    Route::get('goods/manager',['uses' => 'GoodsController@getGoodsList']);
+    Route::get('brand/manager',['uses' => 'BrandController@getBrandList']);
+    Route::get('type/manager',['uses' => 'TypeController@getTypeList']);
 });
 

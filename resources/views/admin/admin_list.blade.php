@@ -56,7 +56,7 @@
             </tr>
             @foreach($users as $k => $user)
                 <tr>
-                    <th></th>
+                    <th><input type="checkbox" value="{{$user -> admin_id}}"></th>
                     <td>{{$user -> admin_name}}</td>
                     <th>@if($user -> admin_status == 0)<span class="status_stop">冻结</span>@elseif($user -> admin_status == 1)<span class="status_normal">正常</span>@endif</th>
                     <td>@if(!empty($user -> mobile)){{$user -> mobile}}@else<span class="null">Null</span>@endif</td>

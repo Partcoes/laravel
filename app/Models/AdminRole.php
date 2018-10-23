@@ -9,6 +9,8 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 //use Zizaco\Entrust\EntrustRole;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminRole extends Model
 {
@@ -40,8 +42,23 @@ class AdminRole extends Model
      * @return mixed
      */
     public static function deleteRoleById($roleId){
-        $result = self::find($roleId) -> delete();
-        return $result;
+        DB::beginTransaction();
+        try {
+            $deleteRole = self::find($roleId) -> delete();
+            $deleteResource = AdminResource::deleteResourceByRoleId($roleId);
+//            dump($deleteResource);
+            if ($deleteRole && $deleteResource) {
+                DB::commit();
+                return true;
+            } else {
+                DB::rollBack();
+                return false;
+            }
+        }catch (\Exception $e){
+            Log::error($e -> getMessage());
+            DB::rollBack();
+            return false;
+        }
     }
 
     public static function getRoleById($roleId)

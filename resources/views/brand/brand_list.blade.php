@@ -15,9 +15,6 @@
     hr{
         border-bottom: 1px solid black !important;
     }
-    .name-left{
-        text-align: left !important;
-    }
     .status_normal{
         color:green;
     }
@@ -35,7 +32,7 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>菜单管理</h1>
+    <h1>商品管理</h1>
     <hr/>
 @stop
 
@@ -51,27 +48,28 @@
         <table class="table table-active">
             <tr>
                 <th>#</th>
-                <th class="name-left">菜单名称</th>
-                <th>菜单路由</th>
-                <th>icon名称</th>
-                <th>菜单图标</th>
+                <th>品牌名称</th>
+                <th>品牌官网</th>
+                <th>品牌log</th>
+                <th>品牌状态</th>
+                <th>品牌简介</th>
                 <th>操作</th>
             </tr>
-            @foreach($menus as $k => $menu)
+            @foreach($brands as $k => $brand)
                 <tr>
-                    <th><input type="checkbox" value="{{$menu -> menu_id}}"></th>
-                    <td class="name-left">{!!str_repeat("<span class='fa fa-fw  fa-forward'></span>",substr_count($menu -> path,'-')+1) . $menu -> menu_name!!}</td>
-                    <td>{{$menu -> menu_url}}</td>
-                    <th>{{$menu -> icon}}</th>
-                    {{--<th>@if($menu -> menu_status == 0)<span class="status_stop">冻结</span>@elseif($menu -> menu_status == 1)<span class="status_normal">正常</span>@endif</th>--}}
-                    <td>@if($menu -> icon_status == 1)<span class="fa fa-fw fa-circle-o text-{{$menu -> icon}}"></span>@else<span class="fa fa-fw fa-{{$menu -> icon}}"></span>@endif</td>
+                    <th><input type="checkbox" value="{{$brand -> brand_id}}"></th>
+                    <td>{{$brand -> brand_name}}</td>
+                    <td>{{$brand -> brand_url}}</td>
+                    <td>@if(!empty($brand -> brand_log)){{$brand -> brand_log}}@else<span class="null">Null</span>@endif</td>
+                    <th>@if($brand -> brand_status == 0)<span class="status_stop">×</span>@elseif($brand -> brand_status == 1)<span class="status_normal">√</span>@endif</th>
+                    <td>{{$brand -> brand_brief}}</td>
                     <th>
                         @if($buttons)
                             @foreach($buttons as $k => $button)
                                 @if($button -> button_name == '删除')
-                                    <button delete="delete" alerturl="{{url($button -> button_url)}}?id={{$menu -> menu_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</button>
+                                    <button href="javascript:void(0)" alerturl="{{url($button -> button_url)}}?id={{$brand-> brand_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</button>
                                 @else
-                                    <a href="{{url($button -> button_url)}}?id={{$menu-> menu_id}}" alerturl="{{url($button -> button_url)}}?id={{$menu -> menu_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</a>
+                                    <a href="{{url($button -> button_url)}}?id={{$brand-> brand_id}}" alerturl="{{url($button -> button_url)}}?id={{$brand-> brand_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</a>
                                 @endif
                             @endforeach
                         @endif
@@ -79,7 +77,7 @@
                 </tr>
             @endforeach
         </table>
-        <div style="position: absolute !important;left:40% !important;top:65%;">{{$menus -> links()}}</div>
+        <div style="position: absolute !important;left:40% !important;top:60%;">{{ $brands->links() }}</div>
     </div>
 @stop
 
@@ -89,7 +87,7 @@
 
 @section('js')
     <script>
-        $("button[delete='delete']").click(function(){
+        $("button[href='javascript:void(0)']").click(function(){
             var url = $(this).attr('alerturl');
             var obj = $(this);
             $.ajax({
@@ -99,12 +97,12 @@
                     if(msg == 1) {
                         obj.parents('tr').remove();
                     }else{
-                        alert('删除失败！');
+                        console.log(msg);return;
                     }
                 },
                 error:function(msg){
                     var errorText = msg.responseText;
-                    errorText.indexOf('您没有该项权限！');
+                    console.log(errorText.indexOf('您没有该项权限！'));
                     alert('您没有该项权限');
                     return;
                 }

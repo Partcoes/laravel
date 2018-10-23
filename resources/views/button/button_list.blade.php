@@ -15,9 +15,6 @@
     hr{
         border-bottom: 1px solid black !important;
     }
-    .name-left{
-        text-align: left !important;
-    }
     .status_normal{
         color:green;
     }
@@ -35,7 +32,7 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>菜单管理</h1>
+    <h1>按钮管理</h1>
     <hr/>
 @stop
 
@@ -51,27 +48,26 @@
         <table class="table table-active">
             <tr>
                 <th>#</th>
-                <th class="name-left">菜单名称</th>
-                <th>菜单路由</th>
-                <th>icon名称</th>
-                <th>菜单图标</th>
+                <th>按钮名称</th>
+                <th>页面</th>
+                <th>class</th>
+                <th>按钮图标</th>
                 <th>操作</th>
             </tr>
-            @foreach($menus as $k => $menu)
+            @foreach($buttons as $k => $button)
                 <tr>
-                    <th><input type="checkbox" value="{{$menu -> menu_id}}"></th>
-                    <td class="name-left">{!!str_repeat("<span class='fa fa-fw  fa-forward'></span>",substr_count($menu -> path,'-')+1) . $menu -> menu_name!!}</td>
-                    <td>{{$menu -> menu_url}}</td>
-                    <th>{{$menu -> icon}}</th>
-                    {{--<th>@if($menu -> menu_status == 0)<span class="status_stop">冻结</span>@elseif($menu -> menu_status == 1)<span class="status_normal">正常</span>@endif</th>--}}
-                    <td>@if($menu -> icon_status == 1)<span class="fa fa-fw fa-circle-o text-{{$menu -> icon}}"></span>@else<span class="fa fa-fw fa-{{$menu -> icon}}"></span>@endif</td>
+                    <th><input type="checkbox" value="{{$button -> button_id}}"></th>
+                    <td>{{$button['button_name']}}</td>
+                    <td>{{$button['menu_name']}}</td>
+                    <td>{{$button['class']}}</td>
+                    <td style="text-align: left !important;"><button class="btn @if(!empty($button['class'])) {{$button['class']}} @else btn-default @endif">{{$button['button_name']}}</button></td>
                     <th>
-                        @if($buttons)
-                            @foreach($buttons as $k => $button)
-                                @if($button -> button_name == '删除')
-                                    <button delete="delete" alerturl="{{url($button -> button_url)}}?id={{$menu -> menu_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</button>
+                        @if($groups)
+                            @foreach($groups as $k => $group)
+                                @if($group -> button_name == '删除')
+                                    <button delete="delete" alerturl="/{{$group -> button_url}}?id={{$button['button_id']}}"  class="btn {{$group -> class}}">{{$group -> button_name}}</button>
                                 @else
-                                    <a href="{{url($button -> button_url)}}?id={{$menu-> menu_id}}" alerturl="{{url($button -> button_url)}}?id={{$menu -> menu_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</a>
+                                    <a href="{{$group -> button_url}}" class="btn {{$group -> class}}">{{$group -> button_name}}</a>
                                 @endif
                             @endforeach
                         @endif
@@ -79,7 +75,7 @@
                 </tr>
             @endforeach
         </table>
-        <div style="position: absolute !important;left:40% !important;top:65%;">{{$menus -> links()}}</div>
+        <div style="position: absolute !important;left:40% !important;top:60%;">{{ $buttons->links() }}</div>
     </div>
 @stop
 
@@ -98,13 +94,14 @@
                 success:function(msg){
                     if(msg == 1) {
                         obj.parents('tr').remove();
+                        history.go(0);
                     }else{
-                        alert('删除失败！');
+                        console.log(msg);return;
                     }
                 },
                 error:function(msg){
                     var errorText = msg.responseText;
-                    errorText.indexOf('您没有该项权限！');
+                    console.log(errorText.indexOf('您没有该项权限！'));
                     alert('您没有该项权限');
                     return;
                 }

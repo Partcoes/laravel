@@ -38,16 +38,16 @@ class AdminUser extends Model
                 if($result['admin_type'] == 1){
                     $menus = AdminMenu::getAllMenu(true,false,6,false);
                     $buttons = AdminButton::getAllButton();
-                    $buttonIds = array_column($buttons,'button_id');
+//                    $buttonIds = array_column($buttons,'button_id');
                     //当点击这个页面是，点击按钮的时候传入按钮的id，判断这id是否在有权限的id数组里
-                    $menus['buttonIds'] = $buttonIds;
+//                    $menus['buttonIds'] = $buttonIds;
                 }else {
                     $roleIds = AdminShip::AdminGetRole($result['admin_id']);
+//                    dd($roleIds);
                     $resourceIds = AdminResource::roleGetResource($roleIds);
-//                dd($resourceIds['type1']);
                     if (isset($resourceIds['type0'])) {
                         $menus = AdminMenu::resourGetMenu($resourceIds['type0']);
-                        $menus['buttonIds'] = [];
+                        $menus['urls'] = [];
                     }
                     if (isset($resourceIds['type1'])) {
                         $buttons = AdminButton::reIdGetButton($resourceIds['type1']);
@@ -55,8 +55,10 @@ class AdminUser extends Model
                 }
                     if($buttons && $menus)
                     {
-                        $buttonsIds = array_column($buttons,'button_id');
-                        $menus['buttonIds'] = $buttonsIds;
+//                        dd($buttons);
+                        $buttonsIds = array_column($buttons,'button_url');
+                        $menus['urls'] = $buttonsIds;
+                        //修改了buttonIds
                     }
                 session(['menu'=>$menus]);
 //                dd(session('menu'));

@@ -35,13 +35,18 @@ class IndexService
         return $goodsList;
     }
 
+    public static function getTypeList()
+    {
+        $types = self::tree(Type::getTypeList(),'type_id');
+        dd($types);
+    }
     /**
      * 无限极分类方法
      * @param $typeInfo 要进行无限极分类的数据
      * @param int $parent_id 数据中的父级id
      * @return array 返回值是处理好的数组
      */
-    public static function tree($typeInfo,$parent_id = 0)
+    public static function tree($typeInfo,$primaryKey = 'type_id',$parent_id = 0)
     {
         $newTypeInfo = [];
         //$i是reid,这里采用了重新生成下标的需求
@@ -54,7 +59,7 @@ class IndexService
                 if ($type['parent_id'] == $parent_id){
                     $type['reid'] = $i;
                     $newTypeInfo[$key] = $type;
-                    $newTypeInfo[$key]['son'] = self::tree($typeInfo,$type['type_id']);
+                    $newTypeInfo[$key]['son'] = self::tree($typeInfo,$type[$primaryKey]);
                     $i++;
                 }
             }

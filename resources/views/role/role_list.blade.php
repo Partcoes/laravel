@@ -61,7 +61,7 @@
                     @if($buttons)
                         @foreach($buttons as $k => $button)
                             @if($button -> button_name == '删除')
-                                <button href="javascript:void(0)" alerturl="{{url($button -> button_url)}}?id={{$role -> role_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</button>
+                                <button delete="delete" alerturl="{{url($button -> button_url)}}?id={{$role -> role_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</button>
                             @else
                                 <a href="{{url($button -> button_url)}}?id={{$role-> role_id}}" alerturl="{{url($button -> button_url)}}?id={{$role -> role_id}}" class="btn {{$button -> class}}">{{$button -> button_name}}</a>
                             @endif
@@ -78,5 +78,28 @@
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+    <script>
+        $("button[delete='delete']").click(function(){
+            var url = $(this).attr('alerturl');
+            var obj = $(this);
+            $.ajax({
+                url:url,
+                type:'get',
+                success:function(msg){
+                    if(msg == 1) {
+                        obj.parents('tr').remove();
+                        history.go(0);
+                    }else{
+                        console.log(msg);return;
+                    }
+                },
+                error:function(msg){
+                    var errorText = msg.responseText;
+                    console.log(errorText.indexOf('您没有该项权限！'));
+                    alert('您没有该项权限');
+                    return;
+                }
+            })
+        })
+    </script>
 @stop
