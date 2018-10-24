@@ -16,6 +16,7 @@ class TypeController extends Controller
         $menuId = AdminMenu::getMenuIdForNow($menuUri);
         $buttons = AdminButton::getButtonHad($menuId);
         $buttons = AdminService::dealButton($buttons);
-        $TypeList = IndexService::getTypeList();
+        $typeList = IndexService::getTypeList();
+        return view('type.type_list',['alones' => $buttons['alone'],'buttons' => $buttons['group'],'types' => $typeList]);
     }
 }

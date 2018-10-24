@@ -37,8 +37,10 @@ class IndexService
 
     public static function getTypeList()
     {
-        $types = self::tree(Type::getTypeList(),'type_id');
+//        $types = self::tree(Type::getTypeList('',false,false),'type_id');
+        $types = self::createPath(Type::getTypeList('',true,true)['data'],'type_id',true,'-');
         dd($types);
+        return $types;
     }
     /**
      * 无限极分类方法
@@ -59,7 +61,7 @@ class IndexService
                 if ($type['parent_id'] == $parent_id){
                     $type['reid'] = $i;
                     $newTypeInfo[$key] = $type;
-                    $newTypeInfo[$key]['son'] = self::tree($typeInfo,$type[$primaryKey]);
+                    $newTypeInfo[$key]['son'] = self::tree($typeInfo,$primaryKey,$type[$primaryKey]);
                     $i++;
                 }
             }
@@ -79,6 +81,33 @@ class IndexService
         }
         $newArr = array_chunk($datas,$num);
         return $newArr;
+    }
+
+    /**处理path排序
+     * @param $typeInfo
+     * @param string $primaryKey
+     * @param int $parent_id
+     * @return array
+     */
+    public static function createPath($typeInfo,$primaryKey = 'type_id',$path = '',$pathDelimit = '-',$parent_id = 0)
+    {
+        $newTypeInfo = [];
+        //$i是reid,这里采用了重新生成下标的需求
+        $i = 0;
+        if ($typeInfo){
+            foreach($typeInfo as $key => $type)
+            {
+                if(!empty($path) && $type['parent_id'] != 0)
+                {
+                    $type['path'] = $type['parent_id'].$pathDelimit.$type['type_id'];
+                }elseif($type['parent_id'] == 0){
+                    $type['path'] = $type['parent_id'];
+                }
+                $newTypeInfo[] = $type;
+            }
+        }
+        array_multisort(array_column($newTypeInfo,'path'),SORT_ASC,$newTypeInfo);
+        return $newTypeInfo;
     }
 
 }
