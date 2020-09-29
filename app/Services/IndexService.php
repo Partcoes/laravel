@@ -9,6 +9,9 @@ namespace App\Services;
 
 use App\Models\Type;
 use App\Models\Goods;
+use App\Models\AdminMenu;
+use App\Models\AdminButton;
+use App\Services\AdminService;
 
 class IndexService
 {
@@ -38,8 +41,7 @@ class IndexService
     public static function getTypeList()
     {
 //        $types = self::tree(Type::getTypeList('',false,false),'type_id');
-        $types = self::createPath(Type::getTypeList('',true,true)['data'],'type_id',true,'-');
-        dd($types);
+        $types = Type::getTypeList('',true,false);
         return $types;
     }
     /**
@@ -48,7 +50,7 @@ class IndexService
      * @param int $parent_id 数据中的父级id
      * @return array 返回值是处理好的数组
      */
-    public static function tree($typeInfo,$primaryKey = 'type_id',$parent_id = 0)
+    public static function tree($typeInfo,$primaryKey = 'type_id',$parent_id = 0,$isLevel = false,$level = 1)
     {
         $newTypeInfo = [];
         //$i是reid,这里采用了重新生成下标的需求
@@ -60,8 +62,11 @@ class IndexService
 //                dump($type);
                 if ($type['parent_id'] == $parent_id){
                     $type['reid'] = $i;
+                    if($isLevel == true){
+                        $type['level'] = $level;
+                    }
                     $newTypeInfo[$key] = $type;
-                    $newTypeInfo[$key]['son'] = self::tree($typeInfo,$primaryKey,$type[$primaryKey]);
+                    $newTypeInfo[$key]['son'] = self::tree($typeInfo,$primaryKey,$type[$primaryKey],$isLevel,$level+1);
                     $i++;
                 }
             }
@@ -83,31 +88,26 @@ class IndexService
         return $newArr;
     }
 
-    /**处理path排序
-     * @param $typeInfo
-     * @param string $primaryKey
-     * @param int $parent_id
-     * @return array
+    /**获取当前页面的所有的额按钮
+     * @param $request
+     * @return array|bool
      */
-    public static function createPath($typeInfo,$primaryKey = 'type_id',$path = '',$pathDelimit = '-',$parent_id = 0)
+    public static function getButtonsByPage($request)
     {
-        $newTypeInfo = [];
-        //$i是reid,这里采用了重新生成下标的需求
-        $i = 0;
-        if ($typeInfo){
-            foreach($typeInfo as $key => $type)
-            {
-                if(!empty($path) && $type['parent_id'] != 0)
-                {
-                    $type['path'] = $type['parent_id'].$pathDelimit.$type['type_id'];
-                }elseif($type['parent_id'] == 0){
-                    $type['path'] = $type['parent_id'];
-                }
-                $newTypeInfo[] = $type;
-            }
+        if(!$request){
+            return false;
         }
-        array_multisort(array_column($newTypeInfo,'path'),SORT_ASC,$newTypeInfo);
-        return $newTypeInfo;
+        $menuUri = $request -> path();
+        $menuId = AdminMenu::getMenuIdForNow($menuUri);
+        if(empty($menuId)){
+            return [
+                'alone'=>'',
+                'group'=>''
+            ];
+        }
+        $buttons = AdminButton::getButtonHad($menuId);
+        $buttons = AdminService::dealButton($buttons);
+        return $buttons;
     }
 
 }

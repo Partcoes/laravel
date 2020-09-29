@@ -1,4 +1,5 @@
 @extends('adminlte::page')
+<link rel="stylesheet" href="http://adminlte.la998.com/plugins/iCheck/all.css">
 <style>
     tr,td,th{
         border: 1px solid #ccc !important;
@@ -40,7 +41,6 @@
 @section('content')
     <form action="" method="post">
         {!! csrf_field() !!}
-
         <div class="form-group has-feedback {{ $errors->has('name') ? 'has-error' : '' }}">
             <input type="text" name="button_name" class="form-control" value="{{ old('name') }}"
                    placeholder="按钮名称">
@@ -50,14 +50,6 @@
             <input type="text" name="button_url" class="form-control" value="{{ old('email') }}"
                    placeholder="按钮路由地址控制器/动作，例如：exmple/way">
             <span style="position: absolute; right: 10px;bottom:10px;" class="fa fa-fw fa-paper-plane-o"></span>
-        </div>
-        <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
-            <label class="radio-inline">
-                <input type="radio" name="button_group" value="0">顶部按钮
-            </label>
-            <label class="radio-inline">
-                <input type="radio" checked name="button_group" value="1">行按钮
-            </label>
         </div>
         <div class="form-group has-feedback {{ $errors->has('password') ? 'has-error' : '' }}">
             <select name="class" id="select" class="form-control">
@@ -70,12 +62,39 @@
         </div>
         <div class="form-group has-feedback {{ $errors->has('password_confirmation') ? 'has-error' : '' }}">
             <select name="menu_id" id="parent-menu" class="form-control">
-                <option value="0">顶级菜单</option>
                 @foreach($menus as $k => $menu)
                     <option icon="{{$menu -> icon}}" type="{{$menu -> icon_status}}" value="{{$menu -> menu_id}}">{{str_repeat('- ',substr_count($menu -> path,'-')+1).'>' . $menu -> menu_name}}</option>
                 @endforeach
             </select>
             <span id='parent-icon' style="position: absolute; right: 10px;bottom:10px;" class="btn "></span>
+        </div>
+        <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
+            <label>
+                <input type="radio" name="button_group" value="0" class="minimal">
+            </label>
+            <label>
+                <input type="radio" class="minimal" disabled>顶部按钮
+            </label>
+            <label style="margin-left: 15px;">
+                <input type="radio" name="button_group"  checked value="1" class="minimal">
+            </label>
+            <label>
+                <input type="radio" class="minimal" value="0" disabled>行按钮
+            </label>
+        </div>
+        <div class="form-group has-feedback {{ $errors->has('email') ? 'has-error' : '' }}">
+            <label>
+                <input type="radio" name="code" value="button" class="minimal" checked>
+            </label>
+            <label>
+                <input type="radio" class="minimal" disabled>ajax按钮
+            </label>
+            <label style="margin-left: 15px;">
+                <input type="radio" name="code" class="minimal">
+            </label>
+            <label>
+                <input type="radio" name="code" class="minimal" value="a" disabled>a链接
+            </label>
         </div>
         <button type="submit"
                 class="btn btn-primary btn-block btn-flat"
@@ -94,6 +113,29 @@
 @stop
 
 @section('js')
+    <script src="/vendor/Adminlte/plugins/iCheck/icheck.min.js"></script>
+    <script>
+        $(function () {
+            //初始化InputMask控件
+
+            //iCheck for checkbox and radio inputs
+            $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+                checkboxClass: 'icheckbox_minimal-blue',
+                radioClass: 'iradio_minimal-blue'
+            })
+            //Red color scheme for iCheck
+            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+                checkboxClass: 'icheckbox_minimal-red',
+                radioClass: 'iradio_minimal-red'
+            })
+            //Flat red color scheme for iCheck
+            $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+                checkboxClass: 'icheckbox_flat-green',
+                radioClass: 'iradio_flat-green'
+            })
+        });
+
+    </script>
     <script>
         $('#select').change(function(){
             var val = $(this).val();

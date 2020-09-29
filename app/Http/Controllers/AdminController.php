@@ -45,18 +45,9 @@ class AdminController extends Controller
         $menus = session('menu');
         unset($menus['urls']);
         $menuses = AdminService::tree($menus,'menu_id');
-//        array_unshift($menuses,'导航栏');
 //        dd($menus);
         config(['adminlte.menu'=>$menuses]);
-//        dd($menu);
-
-//        dd($menus);
 //        dd(\Route::current());
-
-//        dd($menus);
-
-//        dd(config('adminlte'));
-
         return view('admin/index');
     }
 

@@ -34,17 +34,19 @@ class AdminMenu extends Model
      * @param bool $isToArray 是否转为数组 默认是true
      * @return mixed
      */
-    public static function getAllMenu($isToArray = true,$isPage = false,$pageSize = 6,$sort = true)
+    public static function getAllMenu($isToArray = true,$isPage = false,$pageSize = '',$sort = true,$isShow = true)
     {
         $pageSize = empty($pageSize)?6:$pageSize;
        if($isToArray && $sort == true){
-           $menus = self::orderBy('path','asc') ->get() -> toArray();
+           $menus = self::where(['is_show' => 1]) -> orderBy('path','asc') ->get() -> toArray();
        }elseif($isPage == true && $pageSize){
-           $menus = self::paginate($pageSize);
+           $menus = self::where(['is_show' => 1]) -> paginate($pageSize);
        }elseif($sort == false && $isToArray == true){
-            $menus = self::get() -> toArray();
-       }else{
+            $menus = self::where(['is_show' => 1]) -> get() -> toArray();
+       }elseif(!$isShow){
            $menus = self::get();
+       }else{
+           $menus = self::where(['is_show' => 1]) -> get();
        }
        return $menus;
     }
@@ -55,8 +57,11 @@ class AdminMenu extends Model
      */
     public static function getMenuIdForNow($uri)
     {
-        $nowMenuId = self::where(['menu_url'=>$uri]) -> first(['menu_id']) -> toArray();
-        return $nowMenuId;
+        $nowMenuId = self::where(['menu_url'=>$uri]) -> first(['menu_id']);
+        if($nowMenuId == null){
+            return [];
+        }
+        return $nowMenuId -> toArray();
     }
 
     public static function getMenuByParentId($parentId,$isToArray = true)
