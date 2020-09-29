@@ -16,6 +16,8 @@ class AdminButton extends Model
 {
     protected $table = 'Admin_button';
     protected $primaryKey = 'button_id';
+    protected $guarded = [];
+    public $timestamps = false;
 
     /**
      * @param $button_id 对应的button数组
@@ -69,6 +71,17 @@ class AdminButton extends Model
     public static function deleteButtonById($buttonId)
     {
         $result = self::find($buttonId) -> delete();
+        return $result;
+    }
+
+    public static function getButton($buttonId)
+    {
+        $button = self::find($buttonId);
+        return $button;
+    }
+    public static function updateButton($formInfo,$buttonId)
+    {
+        $result = self::find($buttonId) -> update($formInfo);
         return $result;
     }
 }

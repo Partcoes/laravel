@@ -49,7 +49,7 @@
             <tr>
                 <th>#</th>
                 <th>商品名</th>
-                <th>商品货号</th>
+                <th style="width: 25% !important;">商品货号</th>
                 <th>商品价格</th>
                 <th>上架</th>
                 <th>商品库存</th>
@@ -77,7 +77,7 @@
                 </tr>
             @endforeach
         </table>
-        <div style="position: absolute !important;left:40% !important;top:60%;">{{ $goods->links() }}</div>
+        <div style="position: absolute !important;left:40% !important;top:65%;">{{ $goods->links() }}</div>
     </div>
 @stop
 

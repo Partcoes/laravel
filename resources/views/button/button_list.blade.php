@@ -67,7 +67,7 @@
                                 @if($group -> button_name == '删除')
                                     <button delete="delete" alerturl="/{{$group -> button_url}}?id={{$button['button_id']}}"  class="btn {{$group -> class}}">{{$group -> button_name}}</button>
                                 @else
-                                    <a href="{{$group -> button_url}}" class="btn {{$group -> class}}">{{$group -> button_name}}</a>
+                                    <a href="/{{$group -> button_url}}?rand={{$button['button_id']}}" class="btn {{$group -> class}}">{{$group -> button_name}}</a>
                                 @endif
                             @endforeach
                         @endif

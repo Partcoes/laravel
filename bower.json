@@ -1,0 +1,18 @@
+{
+  "name": "laravel",
+  "description": "",
+  "main": "",
+  "authors": [
+    "青彦\\青彦 <2247809345@qq.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Partcoes/laravel",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/bower",
+    "test",
+    "tests"
+  ]
+}

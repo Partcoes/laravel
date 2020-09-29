@@ -36,6 +36,8 @@ class MenuController extends Controller
         if($formInfo){
             $result = AdminService::insertMenu($formInfo,$menuList);
             if($result){
+
+//                $rote = file_get_contents(route_path());
                 return redirect('menu/manager');
             }else{
                 return redirect('menu/add');

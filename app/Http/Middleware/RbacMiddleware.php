@@ -19,7 +19,8 @@ class RbacMiddleware
     {
 //        dd($request);
         $menus = session('menu');
-        $url = empty($menus)?'':array_column($menus,'menu_url');
+        $url = empty($menus)?[]:array_column($menus,'menu_url');
+        $menus['urls'] = $menus['urls'] == null?[]:$menus['urls'];
         $url = array_merge($url,$menus['urls']);
 //        dd($menus);
         unset($menus['urls']);

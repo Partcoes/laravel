@@ -35,7 +35,7 @@ class Goods extends Model
         return $goodsList;
     }
 
-    public static function getGoodsList($isUp = 1 , $isHot = 0 , $isPage = true,$pageSize = 8)
+    public static function getGoodsList($isUp = 1 , $isHot = 0 , $isPage = true,$pageSize = 6)
     {
         $pageSize = empty($pageSize)?6:$pageSize;
         $base = self::where(['is_up' => $isUp]);
@@ -47,6 +47,16 @@ class Goods extends Model
             $goodsList = $base -> paginate($pageSize);
         }
         return $goodsList;
+    }
+
+    /**添加商品并返回商品id
+     * @param $formInfo
+     * @return mixed
+     */
+    public static function insertGoods($formInfo)
+    {
+        $result = self::insertGetId($formInfo);
+        return $result;
     }
 
 

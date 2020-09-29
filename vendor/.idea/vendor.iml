@@ -2,6 +2,9 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/bower/bootstrap" />
+      <excludeFolder url="file://$MODULE_DIR$/bower/bootstrapvalidator" />
+      <excludeFolder url="file://$MODULE_DIR$/bower/jquery" />
       <excludeFolder url="file://$MODULE_DIR$/jeroennoten/laravel-adminlte" />
       <excludeFolder url="file://$MODULE_DIR$/predis/predis" />
       <excludeFolder url="file://$MODULE_DIR$/symfony/polyfill-ctype" />

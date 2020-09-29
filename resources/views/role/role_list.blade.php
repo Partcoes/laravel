@@ -71,6 +71,7 @@
             </tr>
         @endforeach
     </table>
+    {{--<div style="position: absolute !important;left:40% !important;top:60%;">{{ $roles->links() }}</div>--}}
 @stop
 
 @section('css')

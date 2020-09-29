@@ -46,7 +46,6 @@ abstract class Facade
     public static function shouldReceive()
     {
         $name = static::getFacadeAccessor();
-
         $mock = static::isMock()
                     ? static::$resolvedInstance[$name]
                     : static::createFreshMockInstance();

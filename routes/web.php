@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -77,9 +77,37 @@ Route::group(['middleware' => ['rbac']], function () {
     Route::get('button/manager',['uses' => 'ButtonController@getButtonList']);
     Route::get('button/add',['uses' => 'ButtonController@insertButton']);
     Route::post('button/add',['uses' => 'ButtonController@insertButton']);
+    Route::match(['get','post'],'button/update',['uses'=>'ButtonController@updateButton']);
     Route::get('button/remove',['uses'=>'ButtonController@deleteButtonById']);
     Route::get('goods/manager',['uses' => 'GoodsController@getGoodsList']);
+    Route::match(['get','post'],'goods/add',['uses' => 'GoodsController@insertGoods']);
     Route::get('brand/manager',['uses' => 'BrandController@getBrandList']);
     Route::get('type/manager',['uses' => 'TypeController@getTypeList']);
+    Route::get('type/add',['uses' => 'TypeController@insertType']);
+    Route::post('type/add',['uses' => 'TypeController@insertType']);
+    Route::match(['get','post'],'type/update','TypeController@updateType');
+    Route::get('typeof/manager',['uses'=>'ClassesController@getClassesList']);
+    Route::match(['get','post'],'typeof/update',['uses' => 'ClassesController@updateClass']);
+    Route::get('typeof/remove',['uses' => 'ClassesController@updateClassStatus']);
+    Route::match(['get','post'],'typeof/add',['uses'=>'ClassesController@insertClass']);
+    Route::get('attr/list',['uses' => 'AttrController@getAttrList']);
+    Route::match(['get','post'],'attr/update',['uses'=>'AttrController@updateAttr']);
+    Route::match(['get','post'],'attr/add','AttrController@insertAttr');
+    Route::get('attr/remove',['uses'=>'AttrController@updateAttrStatus']);
+    Route::get('type/remove',['uses'=>'TypeController@updateTypeStatus']);
+    Route::match(['get','post'],'sku/add',['uses' => 'SkuController@insertSku']);
+    Route::get('goods/child/{attr_id?}',function($id){
+        $attrId = ['typeof_id' => $id];
+//        dd($attrId);
+        $attrInfo = \App\Models\Attribute::getAttrList($attrId,false,true);
+        if ($attrInfo) {
+            foreach ($attrInfo as $key => $value) {
+                if ($value['attr_value']) {
+                    $attrInfo[$key]['attr_value'] = explode(",",$value['attr_value']);
+                }
+            }
+        }
+        return view('goods.attr_child',['attrInfo'=>$attrInfo]);
+    });
 });
 

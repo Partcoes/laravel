@@ -7,6 +7,7 @@ use App\Models\AdminButton;
 use App\Models\AdminMenu;
 use App\Services\AdminService;
 
+
 class ButtonController extends Controller
 {
     public function getButtonList(Request $request)
@@ -23,7 +24,7 @@ class ButtonController extends Controller
     public function insertButton(Request $request)
     {
         $formInfo = $request -> input();
-        $menus = AdminMenu::getAllMenu(false);
+        $menus = AdminMenu::getAllMenu(false,false,'','',false);
         $icons = [
             'btn-success',
             'btn-info',
@@ -53,5 +54,28 @@ class ButtonController extends Controller
         }else{
             return 0;
         }
+    }
+
+    public function updateButton(Request $request)
+    {
+        $formInfo = $request -> except('_token');
+        $menus = AdminMenu::getAllMenu(false,false,'','',false);
+        $icons = [
+            'btn-success',
+            'btn-info',
+            'btn-danger',
+            'btn-warning',
+            'btn-primary',
+            'btn-default',
+            'btn-bitbucket'
+        ];
+        if(count($formInfo) > 1){
+            $result = AdminService::updateButton($formInfo);
+            if($result){
+                return redirect('button/manager');
+            }
+        }
+        $button = AdminButton::getButton($formInfo['rand']);
+        return view('button.update_button',['menus'=>$menus,'icons'=>$icons,'button'=>$button]);
     }
 }

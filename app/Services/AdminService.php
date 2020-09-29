@@ -8,6 +8,7 @@
 
 namespace App\Services;
 use App\Models\AdminResource;
+use App\Models\Type;
 use Illuminate\Support\Facades\Validator;
 use App\Models\AdminUser;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,11 @@ class AdminService
         }
         return $newDatas;
     }
+
+    /**处理按钮的种类
+     * @param $buttons
+     * @return array
+     */
     public static function dealButton($buttons)
     {
         if($buttons){
@@ -69,6 +75,11 @@ class AdminService
             ];
         }
     }
+
+    /**处理左边栏的下标方便注入到adminlet配置
+     * @param $menus
+     * @return bool
+     */
     public static function doSlideBar($menus)
     {
 //        echo 1;
@@ -92,6 +103,10 @@ class AdminService
 
     }
 
+    /**添加按钮
+     * @param $formInfo
+     * @return bool
+     */
     public static function insertMenu($formInfo)
     {
         $rule = [
@@ -168,6 +183,11 @@ class AdminService
             return false;
         }
     }
+
+    /**删除管理员
+     * @param $adminId
+     * @return bool
+     */
     public static function deleteAdminById($adminId)
     {
         if(empty($adminId)){return false;}
@@ -216,6 +236,10 @@ class AdminService
 
     }
 
+    /**添加按钮
+     * @param $formInfo
+     * @return bool
+     */
     public static function insertButton($formInfo)
     {
         $rule = [
@@ -223,6 +247,7 @@ class AdminService
             'button_url' => 'unique:admin_button',
             'menu_id' => 'required',
             'button_group' =>'required',
+            'code' => 'required'
         ];
         $vail = Validator::make($formInfo,$rule);
 //        dd($formInfo);
@@ -237,6 +262,38 @@ class AdminService
         }
 
     }
+
+    public static function updateButton($formInfo)
+    {
+        $rule = [
+            'button_name' => 'required',
+            'button_url' => 'required',
+            'menu_id' => 'required',
+            'button_group' =>'required',
+            'code' => 'required',
+            'button_id' => 'required'
+        ];
+        $button_url = AdminButton::getButton($formInfo['button_id']) -> button_url;
+        if($button_url != $formInfo['button_url']){
+            $rule['button_url'] = 'required|unique:admin_button';
+        }
+        $vail = Validator::make($formInfo,$rule);
+        if(isset($formInfo['rand'])){
+            unset($formInfo['rand']);
+        }
+        if($vail -> passes()){
+            $result = AdminButton::updateButton($formInfo,$formInfo['button_id']);
+            return $result;
+        }else{
+            return false;
+        }
+    }
+
+    /**更新按钮
+     * @param $formInfo
+     * @param $menuDetail
+     * @return bool
+     */
     public static function updateMenu($formInfo,$menuDetail)
     {
         $rule = [
@@ -352,6 +409,10 @@ class AdminService
 
     }
 
+    /**更新resource资源关系表
+     * @param $formInfo
+     * @return bool
+     */
     public static function updateResourceById($formInfo)
     {
         $rule = [
@@ -383,8 +444,19 @@ class AdminService
      * @return bool|string 1、成功返回文件名 2、返回源文件名 3、返回扩展名 4、返回临时路径 5、返回上传文件类型
      * 6、 返回文件的路径 例如 /admin/***.jpg
      */
-    public static function uploadSingle($file,$returnType = 6)
+    public static function uploadSingle($file,$returnType = 6,$path = '')
     {
+        if(!empty($path)){
+            $path = public_path(str_replace('/',"\\\\",$path));
+            if(!file_exists($path)){
+                $bool = mkdir($path,0777);
+                if(!$bool){
+                    return false;
+                }
+            }
+//            $path = '"'.$path . '"';
+//            config('filesystems.disks.uploads.root',$path);
+        }
         if ($file->isValid()) {
 
             // 获取文件相关信息
@@ -401,8 +473,8 @@ class AdminService
             //用config函数读取update配置然后拼接上filename;
             if($bool){
                 $fileSrc = str_replace(public_path(),'',config('filesystems.disks.uploads.root'));
-                $fileSrc = str_replace("\\",'/',$fileSrc) ."/" . $filename;
 //                dd($fileSrc);
+                $fileSrc = str_replace("\\",'/',$fileSrc) ."/" . $filename;
                 switch ($returnType)
                 {
                     case 1 : return $filename;
@@ -420,6 +492,10 @@ class AdminService
         return false;
     }
 
+    /**按钮赋权
+     * @param $formInfo
+     * @return bool
+     */
     public static function givePowerForRoleByBtn($formInfo)
     {
         $rule = [
@@ -442,6 +518,12 @@ class AdminService
             return false;
         }
     }
+
+    /**类似按钮分组
+     * @param $buttons
+     * @param $menus
+     * @return array
+     */
     public static function sameMenuIdGroup($buttons,$menus)
     {
         $item = [];
@@ -464,5 +546,24 @@ class AdminService
             }
         }
         return $buttonAndMenu;
+    }
+
+    public static function insertType($request)
+    {
+        $rule = [
+            'type_name' => 'required|unique:type',
+            'type_status' => 'required',
+            'parent_id' => 'required'
+        ];
+        $formInfo = $request -> except('_token');
+        $icon = $request -> file('icon') -> store('test');
+        $formInfo['icon'] = empty($icon) ?'':$icon;
+        $vail = Validator::make($formInfo,$rule);
+        if($vail -> passes()){
+            $result = Type::insertType($formInfo);
+            return $request;
+        }else{
+            return false;
+        }
     }
 }
